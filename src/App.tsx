@@ -43,7 +43,7 @@ const App = () => {
     clicksPerSecond,
   } = useClicksChecker()
 
-  const handleDefaultButtonClick = () => {
+  const handleDefaultButtonClick = (): void => {
     const isOverdrived = Math.random() < overdriveProbability
 
     resetCoolDown()
@@ -60,7 +60,7 @@ const App = () => {
     if (isOverdrived) { activateOverdrive() }
   }
 
-  const handleOverdrivedButtonClick = () => {
+  const handleOverdrivedButtonClick = (): void => {
     resetCoolDown()
 
     if (!isClicksCheckActive) {

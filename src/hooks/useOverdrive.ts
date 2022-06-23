@@ -19,9 +19,9 @@ const useOverdrive = () => {
     return () => { overdriveTimer && clearInterval(overdriveTimer) }
   }, [isOverdriveActive, overdriveTimerSeconds])
 
-  const activateOverdrive = () => setOverdriveActive(true)
+  const activateOverdrive = (): void => setOverdriveActive(true)
 
-  const resetOverdrive = () => {
+  const resetOverdrive = (): void => {
     setOverdriveActive(false)
 
     setOverdriveTimerSeconds(10)

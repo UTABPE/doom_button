@@ -24,9 +24,9 @@ const useClicksChecker = () => {
     return () => { interval && clearInterval(interval) }
   }, [isCheckActive, seconds])
 
-  const isMaxClicksPerSecond = clicksPerSecond === maxClicksPerSecond
+  const isMaxClicksPerSecond: boolean = clicksPerSecond === maxClicksPerSecond
 
-  const increaseClicksPerSecond = () => setClickPerSecond(prevState => prevState + 1)
+  const increaseClicksPerSecond = (): void => setClickPerSecond(prevState => prevState + 1)
 
   const activateClicksCheck = (): void => setCheckActive(true)
 
