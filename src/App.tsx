@@ -1,176 +1,100 @@
-import { useEffect, useState, useRef } from 'react'
-
-import Button from './Button/Button'
 import {
-  WrapperStyled,
-  HeaderStyled,
-  BodyStyled,
-  CountStatsStyled,
-  BlockStyled,
-  ClickPerSecStatsStyled,
-  OverdriveStatsStyled,
-  TrophetsRowStyled,
-  TrophetStyled,
+	WrapperStyled,
+	BodyStyled,
 } from './App.style'
 import { useCounter, useOverdrive, useClicksChecker } from './hooks'
-
-const overdriveProbability = 0.05
+import { Stats, Trophets, Button } from './components'
 
 const App = () => {
-  const ref = useRef<HTMLDivElement>(null)
+	const {
+		isOverdriveActive,
+		overdriveTimerSeconds,
+		activateOverdrive,
+	} = useOverdrive()
 
-  const [trophets, setTrophets] = useState<Array<number>>([])
+	const {
+		counter,
+		coolDownTimerSeconds,
+		isCoolDownActive,
+		increaseCounter,
+		resetCoolDown,
+	} = useCounter()
 
-  const {
-    isOverdriveActive,
-    overdriveTimerSeconds,
-    activateOverdrive,
-  } = useOverdrive()
+	const {
+		isClicksCheckActive,
+		isMaxClicksPerSecond,
+		activateClicksCheck,
+		increaseClicksPerSecond,
+		clicksPerSecond,
+	} = useClicksChecker()
 
-  const {
-    counter,
-    coolDownTimerSeconds,
-    isCoolDownActive,
-    increaseCounter,
-    resetCoolDown,
-  } = useCounter()
+	const handleDefaultButtonClick = (): void => {
+		const isOverdrived = Math.random() < overdriveProbability
 
-  const {
-    isClicksCheckActive,
-    isMaxClicksPerSecond,
-    activateClicksCheck,
-    increaseClicksPerSecond,
-    clicksPerSecond,
-  } = useClicksChecker()
+		resetCoolDown()
 
-  const handleDefaultButtonClick = (): void => {
-    const isOverdrived = Math.random() < overdriveProbability
+		if (!isClicksCheckActive) {
+			activateClicksCheck()
+		}
 
-    resetCoolDown()
+		if (!isMaxClicksPerSecond) {
+			increaseCounter()
+			increaseClicksPerSecond()
+		}
 
-    if (!isClicksCheckActive) {
-      activateClicksCheck()
-    }
+		if (isOverdrived) { activateOverdrive() }
+	}
 
-    if (!isMaxClicksPerSecond) {
-      increaseCounter()
-      increaseClicksPerSecond()
-    }
+	const handleOverdrivedButtonClick = (): void => {
+		resetCoolDown()
 
-    if (isOverdrived) { activateOverdrive() }
-  }
+		if (!isClicksCheckActive) {
+			activateClicksCheck()
+		}
 
-  const handleOverdrivedButtonClick = (): void => {
-    resetCoolDown()
+		if (!isMaxClicksPerSecond) {
+			increaseCounter(2)
+			increaseClicksPerSecond()
+		}
+	}
 
-    if (!isClicksCheckActive) {
-      activateClicksCheck()
-    }
-
-    if (!isMaxClicksPerSecond) {
-      increaseCounter(2)
-      increaseClicksPerSecond()
-    }
-  }
-
-  useEffect(() => {
-    const flooredCount = Math.floor(counter / 10) * 10
-
-    if (flooredCount !== 0 && !trophets.includes(flooredCount)) {
-      setTrophets(prevState => [...prevState, flooredCount])
-    }
-
-    if (ref.current) {
-      ref.current.scroll({
-        left: ref.current.scrollWidth,
-        behavior: 'smooth',
-      })
-    }
-  }, [counter, trophets])
-
-  return (
-    <WrapperStyled>
-      <HeaderStyled>
-        <CountStatsStyled isCoolDownActive={isCoolDownActive}>
-          <p>
-            Count
-          </p>
-          <p>
-            {counter}
-            {' '}
-            points
-          </p>
-        </CountStatsStyled>
-        <BlockStyled>
-          <p>
-            Cool down
-          </p>
-          <p>
-            {coolDownTimerSeconds}
-            {' '}
-            sec.
-          </p>
-        </BlockStyled>
-        <ClickPerSecStatsStyled isMaxClicksPerSecond={isMaxClicksPerSecond}>
-          <p>
-            Click per sec:
-          </p>
-          <p>
-            {clicksPerSecond}
-            {' '}
-            clicks
-          </p>
-        </ClickPerSecStatsStyled>
-        <OverdriveStatsStyled isOverdriveActive={isOverdriveActive}>
-          <p>
-            Overdrive:
-          </p>
-          <p>
-            {isOverdriveActive ? (
-              <>
-                {overdriveTimerSeconds}
-                {' '}
-                sec.
-              </>
-            ) : '--'}
-          </p>
-        </OverdriveStatsStyled>
-      </HeaderStyled>
-      <BodyStyled>
-        {isOverdriveActive
-          ? (
-            <span>
-              <Button
-                cooledDown={isCoolDownActive}
-                disabled={isMaxClicksPerSecond}
-                overdrived
-                onClick={handleOverdrivedButtonClick}
-              >
-                Fire!
-              </Button>
-            </span>
-          )
-          : (
-            <Button
-              cooledDown={isCoolDownActive}
-              disabled={isMaxClicksPerSecond}
-              onClick={handleDefaultButtonClick}
-            >
-              Increase counter
-            </Button>
-          )}
-      </BodyStyled>
-      <TrophetsRowStyled ref={ref}>
-        {trophets.map(t => (
-          <TrophetStyled key={t}>
-            <p>{t}</p>
-            {' '}
-            <p>points</p>
-          </TrophetStyled>
-        ))}
-      </TrophetsRowStyled>
-    </WrapperStyled>
-  )
+	return (
+		<WrapperStyled>
+			<Stats
+				clicksCheck={{ isMaxClicksPerSecond, clicksPerSecond }}
+				coolDown={{ isCoolDownActive, coolDownTimerSeconds }}
+				counter={counter}
+				overdrive={{ isOverdriveActive, overdriveTimerSeconds }}
+			/>
+			<BodyStyled>
+				{isOverdriveActive
+					? (
+						<span>
+							<Button
+								cooledDown={isCoolDownActive}
+								disabled={isMaxClicksPerSecond}
+								overdrived
+								onClick={handleOverdrivedButtonClick}
+							>
+								Fire!
+							</Button>
+						</span>
+					)
+					: (
+						<Button
+							cooledDown={isCoolDownActive}
+							disabled={isMaxClicksPerSecond}
+							onClick={handleDefaultButtonClick}
+						>
+							Increase counter
+						</Button>
+					)}
+			</BodyStyled>
+			<Trophets counter={counter} />
+		</WrapperStyled>
+	)
 }
+
+const overdriveProbability = 0.05
 
 export default App

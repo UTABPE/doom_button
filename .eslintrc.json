@@ -45,7 +45,14 @@
     "no-relative-import-paths"
   ],
   "rules": {
-    "react/jsx-filename-extension": [1, { "extensions": [".tsx"] }],
+    "react/jsx-filename-extension": [
+      1,
+      {
+        "extensions": [
+          ".tsx"
+        ]
+      }
+    ],
     "react/state-in-constructor": 0,
     "react/react-in-jsx-scope": 0,
     "react/jsx-one-expression-per-line": [
@@ -54,9 +61,17 @@
         "allow": "single-child"
       }
     ],
+    "react/jsx-indent-props": [
+      2,
+      "tab"
+    ],
     "react/jsx-indent": [
+      2,
+      "tab"
+    ],
+    "indent": [
       "error",
-      2
+      "tab"
     ],
     "import/extensions": [
       "error",
@@ -162,6 +177,7 @@
       "error",
       "all"
     ],
+    "no-tabs": "off",
     "semi": [
       "error",
       "never"

@@ -3,47 +3,47 @@ import { useState, useEffect } from 'react'
 const maxClicksPerSecond = 3
 
 const useClicksChecker = () => {
-  const [clicksPerSecond, setClickPerSecond] = useState<number>(0)
-  const [seconds, setSeconds] = useState<number>(0)
+	const [clicksPerSecond, setClickPerSecond] = useState<number>(0)
+	const [seconds, setSeconds] = useState<number>(0)
 
-  const [isCheckActive, setCheckActive] = useState<boolean>(false)
+	const [isCheckActive, setCheckActive] = useState<boolean>(false)
 
-  useEffect(() => {
-    let interval: NodeJS.Timer | null = null
+	useEffect(() => {
+		let interval: NodeJS.Timer | null = null
 
-    if (isCheckActive) {
-      interval = setInterval(() => setSeconds(prevState => prevState + 1), 1000)
-    }
+		if (isCheckActive) {
+			interval = setInterval(() => setSeconds(prevState => prevState + 1), 1000)
+		}
 
-    if (interval && seconds >= 1) {
-      clearInterval(interval)
+		if (interval && seconds >= 1) {
+			clearInterval(interval)
 
-      disableCheck()
-    }
+			disableCheck()
+		}
 
-    return () => { interval && clearInterval(interval) }
-  }, [isCheckActive, seconds])
+		return () => { interval && clearInterval(interval) }
+	}, [isCheckActive, seconds])
 
-  const isMaxClicksPerSecond: boolean = clicksPerSecond === maxClicksPerSecond
+	const isMaxClicksPerSecond: boolean = clicksPerSecond === maxClicksPerSecond
 
-  const increaseClicksPerSecond = (): void => setClickPerSecond(prevState => prevState + 1)
+	const increaseClicksPerSecond = (): void => setClickPerSecond(prevState => prevState + 1)
 
-  const activateClicksCheck = (): void => setCheckActive(true)
+	const activateClicksCheck = (): void => setCheckActive(true)
 
-  const disableCheck = (): void => {
-    setCheckActive(false)
+	const disableCheck = (): void => {
+		setCheckActive(false)
 
-    setClickPerSecond(0)
-    setSeconds(0)
-  }
+		setClickPerSecond(0)
+		setSeconds(0)
+	}
 
-  return {
-    clicksPerSecond,
-    isMaxClicksPerSecond,
-    isClicksCheckActive: isCheckActive,
-    activateClicksCheck,
-    increaseClicksPerSecond,
-  }
+	return {
+		clicksPerSecond,
+		isMaxClicksPerSecond,
+		isClicksCheckActive: isCheckActive,
+		activateClicksCheck,
+		increaseClicksPerSecond,
+	}
 }
 
 export default useClicksChecker

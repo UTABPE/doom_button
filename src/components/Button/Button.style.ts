@@ -3,39 +3,39 @@ import styled from 'styled-components'
 import { Props } from './Button.props'
 
 const displayBackgroundColor = ({ overdrived, cooledDown }: Props) => {
-  if (overdrived && cooledDown) {
-    return '#126ab3'
-  }
+	if (overdrived && cooledDown) {
+		return '#126ab3'
+	}
 
-  if (overdrived) {
-    return '#bf5019'
-  }
+	if (overdrived) {
+		return '#bf5019'
+	}
 
-  return '#FFFFFF'
+	return '#FFFFFF'
 }
 
 const displayColor = ({ overdrived, cooledDown }: Props) => {
-  if (overdrived) {
-    return '#FFFFFF'
-  }
+	if (overdrived) {
+		return '#FFFFFF'
+	}
 
-  if (cooledDown) {
-    return '#126ab3'
-  }
+	if (cooledDown) {
+		return '#126ab3'
+	}
 
-  return '#222222'
+	return '#222222'
 }
 
 const displayBorder = ({ overdrived, cooledDown }: Props) => {
-  if (overdrived) {
-    return 'none'
-  }
+	if (overdrived) {
+		return 'none'
+	}
 
-  if (cooledDown) {
-    return '3px solid #126ab3'
-  }
+	if (cooledDown) {
+		return '3px solid #126ab3'
+	}
 
-  return '3px solid #222222'
+	return '3px solid #222222'
 }
 
 export const ButtonStyled = styled.button<Props>`
